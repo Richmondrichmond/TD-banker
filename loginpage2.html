@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TD Bank - Client Login</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #ffffff;
+        }
+        .logo {
+  max-width: 150px;  /* Maximum width for the logo container */
+  position: right;
+  background-color: #e7dede00;
+  width: 50%;
+  margin: 0 auto;    /* Center the logo horizontally */
+  padding: 10px;     /* Optional padding around the logo */
+}
+
+.logo img {
+  width: 100%;       /* Logo fills the container */
+  height: auto;      /* Maintains the aspect ratio */
+  display: block;   /* Removes extra space below the image */
+  object-fit: cover; /* Ensures the image fits within the container without distortion */
+}
+
+            
+
+        .page-container {
+            position: relative;
+            min-height: 10vh;
+            background: url('besttdb2.png') no-repeat center center/cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 20, 0, 0.128);
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Dark mode login box */
+        .login-box {
+            max-width: 400px;
+            padding: 40px;
+            background: #1c1c1c;
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #333;
+            color: white;
+            outline: none;
+        }
+
+        .input-container input::placeholder {
+            color: #bbb;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: white;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            background: #00a859;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .login-box button:hover {
+            background: #008f4a;
+        }
+
+        /* Account Box */
+        .account-box {
+            max-width: 400px;
+            padding: 40px;
+            background: rgba(30, 30, 30, 0.9);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            display: none;
+        }
+
+        .account-box button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            background: #4f71d9;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .account-box button:hover {
+            background: #2c41c9;
+        }
+    </style>
+</head>
+
+<div class="logo">
+    <img src="tdb-tag-white-en.png" alt="TD Bank Logo">
+    
+</div>
+<body>
+    <div class="page-container">
+        <div class="overlay"></div>
+        <div class="content">
+            <!-- Login Box -->
+            <div class="login-box" id="loginBox">
+                <h1>TD Bank Login</h1>
+                <div class="input-container">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="input-container">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <span class="toggle-password" onclick="togglePassword()">👁</span>
+                </div>
+                <button id="loginButton">Login</button>
+            </div>
+            
+            <!-- Account Box -->
+            <div class="account-box" id="accountBox">
+                <h1>Welcome, Wolt Personal checkings</h1>
+                <p><strong>Checking Account:</strong> $50,000</p>
+                <p><strong>Savings Account:</strong> $5,000</p>
+                <p><strong>Available Balance:</strong> $55,000</p>
+                <a href="amountpage1.html"><button>Business Account</button></a>
+                <button id="logoutButton">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock User Data
+        const user = {
+            username: 'Mary',
+            password: 'Cat123', 
+             
+            accounts: {
+                checking: 500000,
+                savings: 250000,
+                total: 750000
+            }
+        };
+
+        // Elements
+        const loginBox = document.getElementById('loginBox');
+        const accountBox = document.getElementById('accountBox');
+        const loginButton = document.getElementById('loginButton');
+        const logoutButton = document.getElementById('logoutButton');
+
+        // Login Event
+        loginButton.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === user.username && password === user.password) {
+                alert('Login successful!');
+                loginBox.style.display = 'none'; // Hide login box
+                accountBox.style.display = 'block'; // Show account details
+            } else {
+                alert('Invalid username or password.');
+            }
+        });
+
+        // Logout Event
+        logoutButton.addEventListener('click', () => {
+            alert('You have been logged out.');
+            loginBox.style.display = 'block'; // Show login box
+            accountBox.style.display = 'none'; // Hide account details
+        });
+        const verifyButton = document.getElementById('verify-button');
+const verificationResult = document.getElementById('verification-result');
+
+verifyButton.addEventListener('click', () => {
+    // You can add your own verification logic here
+    // For example, you can send a request to your server to verify the user
+    // For this example, we'll just display a success message
+    verificationResult.innerText = 'Verification successful!';
+    verifyButton.disabled = true;
+});
+
+    </script>
+        
+    </script>
+    
+</body>
+</html>

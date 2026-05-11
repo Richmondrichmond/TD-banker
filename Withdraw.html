@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdraw Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@50;150;300&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #043D33;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: rgba(4, 61, 51, 0.7);
+      backdrop-filter: blur(8px);
+      color: white;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      font-size: 18px;
+    }
+    .container {
+      padding: 100px 20px 20px;
+      max-width: 500px;
+      margin: auto;
+      background: rgba(103, 97, 97, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      color: black;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .button {
+      background: #14a76c;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .button:hover {
+      background: #0E5D26;
+    }
+    .fee-info {
+      font-size: 14px;
+      color: white;
+      margin-top: 10px;
+    }
+    .amount-box {
+      width: 80px;
+    }
+  </style>
+  <script>
+    function calculateFee() {
+      let amount = parseFloat(document.getElementById("amount").value);
+      let fee = 0;
+      if (amount >= 100 && amount <= 500) {
+        fee = 25;
+      } else if (amount > 500 && amount <= 1000) {
+        fee = 50;
+      } else if (amount > 1000) {
+        fee = 100;
+      }
+      document.getElementById("feeDisplay").innerText = "Fee Deducted: $" + fee.toFixed(2);
+    }
+  </script>
+</head>
+<body>
+  <div class="header">
+    <span>Hi, Thomas!</span>
+    
+  </div>
+  
+  <div class="container">
+    <h1>Withdraw Funds</h1>
+    <label for="accountType">Select Account:</label>
+    <select id="accountType">
+      <option>Personal Account</option>
+      <option>Business Checking</option>
+    </select>
+    
+    <label for="withdrawMethod">Withdrawal Method:</label>
+    <select id="withdrawMethod">
+      <option>ATM</option>
+      <option>PayPal</option>
+      <option>CashApp</option>
+      <option>Zelle</option>
+      <option>Bitcoin</option>
+      
+    </select>
+    
+    <label for="amount">Enter Amount:</label>
+    <input type="number" id="amount" class="amount-box" placeholder="$0.00" oninput="calculateFee()">
+    
+    <p class="fee-info" id="feeDisplay">Fee Deducted: $0.00</p>
+    
+    <a href="withdraw-confirmation.html" class="button">Next</a>
+  </div>
+</body>
+</html>

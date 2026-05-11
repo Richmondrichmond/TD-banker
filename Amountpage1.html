@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunity Checking</title>
+
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@50;150;300&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #043D33;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Transparent Glass Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: rgba(4, 61, 51, 0.7);
+      backdrop-filter: blur(8px);
+      color: white;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      font-size: 18px;
+    }
+            /* General Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #2c6716d7;
+            color: #201b1b;
+        }
+        .logo {
+  max-width: 0px;  /* Maximum width for the logo container */
+  position: right;
+  background-color: #e7dede00;
+  width: 10%;
+  margin: 0 auto;    /* Center the logo horizontally */
+  padding: 10px;     /* Optional padding around the logo */
+}
+
+.logo img {
+  width: 10%;       /* Logo fills the container */
+  height: auto;      /* Maintains the aspect ratio */
+  display: block;   /* Removes extra space below the image */
+  object-fit: cover; /* Ensures the image fits within the container without distortion */
+}
+
+    .balance-section {
+      text-align: center;
+      padding: 100px 10px 20px;
+    }
+
+    .balance-section h1 {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .balance-section h2 {
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .balance-section p {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px;
+    }
+
+    /* Modern Gradient Buttons */
+    .button {
+      background: linear-gradient(135deg, #14a76c, #0E5D26);
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button:hover {
+      background: linear-gradient(135deg, #0E5D26, #14a76c);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .transactions {
+      background-color: #fff;
+      color: #000;
+      padding: 20px;
+      border-radius: 20px 20px 0 0;
+      margin-top: 30px;
+    }
+
+    .transactions h2 {
+      font-size: 20px;
+      font-weight: 600;
+      border-bottom: 2px solid #043D33;
+      padding-bottom: 5px;
+    }
+
+    /* Transaction Items */
+    .transaction-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      margin: 10px 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+
+    .transaction-item div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .transaction-item strong {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .transaction-item p {
+      margin: 3px 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .transaction-amount {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .transaction-amount.negative {
+      color: red;
+    }
+
+    .transaction-amount.positive {
+      color: green;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+        font-size: 16px;
+        padding: 10px 15px;
+      }
+      .balance-section h1 {
+        font-size: 22px;
+      }
+      .balance-section h2, .balance-section p {
+        font-size: 16px;
+      }
+      .buttons {
+        gap: 10px;
+        margin: 15px 10px;
+      }
+      .button {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+      .transaction-item {
+        font-size: 14px;
+        padding: 10px;
+      }
+      .transaction-amount {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<div class="logo">
+  <img src="tdb-tag-white-en.png" alt="TD Bank Logo">
+</div>
+<body>
+  <div class="Logo">
+    <span> </span>
+    
+
+    <button onclick="window.location.href='Loginpage2.html';" class="button">Back</button>
+  </div>
+
+  <div class="balance-section">
+    <h1>Opportunity Business Checking</h1>
+    <h2>Available Balance</h2>
+    <p><strong>$39,849,336.33</strong></p>
+    <p class="current-balance">Current Balance: <strong>$150,973.19</strong></p>
+  </div>
+
+  <div class="buttons">
+    <button onclick="window.location.href='Transfer.html';" class="button">Transfer</button>
+    <button onclick="window.location.href='Paycheck.html';" class="button">Pay Check</button>
+    <button onclick="window.location.href='Withdraw.html';" class="button">Withdraw</button>
+    <button onclick="window.location.href='Deposit.html';" class="button">Deposit</button>
+    <button onclick="window.location.href='Histories.html';" class="button">Transactions</button>
+  </div>
+
+  <div class="transactions">
+    <h2>Pending Transactions</h2>
+    <div class="transaction-item">
+      <div>
+        <strong>HFC Business - Check Deposit</strong>
+        <p>Mar 09, 2025</p>
+      </div>
+      <div class="transaction-amount positive">+$500,973.19</div>
+    </div>
+    <div class="transaction-item">
+      <div>
+        <strong>Feeble Business - Check Deposit</strong>
+        <p>Feb, 2025</p>
+      </div>
+      <div class="transaction-amount positive">+$500,973.19</div>
+    </div>
+
+    <h2>Recent Activities</h2>
+    <div class="transaction-item">
+      <div>
+        <strong>KCF Co. LTD Checkings</strong>
+        <p>Direct Deposit - Mar 11, 2025</p>
+      </div>
+      <div class="transaction-amount positive">+$300,973.19</div>
+    </div>
+    <div class="transaction-item">
+      <div>
+        <strong>Check Withdrawal</strong>
+        <p>Feb 25, 2025</p>
+      </div>
+      <div class="transaction-amount negative">-$150,000.00</div>
+    </div>
+  </div>
+</body>
+</html>
