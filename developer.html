@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coone Bank — Developer Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #050b14 0%, #0a1225 100%); color: #eef2ff; }
+    :root { --electric: #2b6ef0; --emerald: #10b981; --card-bg: rgba(12,22,40,0.75); --border-glow: rgba(59,130,246,0.25); }
+    .container { max-width: 1440px; margin: 0 auto; padding: 24px 28px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; border-bottom: 1px solid var(--border-glow); padding-bottom: 16px; }
+    .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #FFF, #80b3ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .dev-badge { background: linear-gradient(135deg, #06b6d420, #2b6ef020); border: 1px solid rgba(6,182,212,0.4); border-radius: 40px; padding: 6px 14px; font-size: 0.7rem; }
+    .user-widget { display: flex; align-items: center; gap: 20px; background: rgba(255,255,255,0.03); padding: 6px 18px; border-radius: 80px; border: 1px solid var(--border-glow); }
+    .avatar { width: 44px; height: 44px; background: linear-gradient(145deg, #06b6d4, #2b6ef0); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 20px; margin-bottom: 32px; }
+    .stat-card { background: var(--card-bg); backdrop-filter: blur(12px); border-radius: 28px; padding: 20px; border: 1px solid var(--border-glow); }
+    .stat-value { font-size: 1.8rem; font-weight: 800; margin: 8px 0; }
+    .dev-main { display: flex; flex-wrap: wrap; gap: 28px; }
+    .sidebar { flex: 1; min-width: 220px; }
+    .content { flex: 3; min-width: 300px; }
+    .glass-card { background: rgba(8,18,32,0.65); backdrop-filter: blur(14px); border-radius: 32px; padding: 24px; border: 1px solid var(--border-glow); margin-bottom: 24px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 600; }
+    .nav-item { padding: 14px 16px; margin: 4px 0; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+    .nav-item:hover { background: rgba(59,130,246,0.1); }
+    .nav-item.active { background: rgba(43,110,240,0.2); border-left: 3px solid var(--electric); }
+    .api-key-container { background: #0f1a2b; border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; font-family: monospace; margin-bottom: 16px; }
+    .code-block { background: #0a0f1a; border-radius: 16px; padding: 20px; overflow-x: auto; font-family: monospace; margin: 16px 0; }
+    .endpoint-item { padding: 16px; border-bottom: 1px solid rgba(59,130,246,0.1); }
+    .endpoint-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-right: 12px; }
+    .method-get { background: var(--emerald); }
+    .method-post { background: var(--electric); }
+    .tester-input, .tester-select { background: #0f1a2b; border: 1px solid #2d4263; border-radius: 48px; padding: 12px 16px; width: 100%; margin: 8px 0; color: white; }
+    .btn-primary { background: linear-gradient(105deg, var(--electric), #1a4fcf); border: none; padding: 10px 20px; border-radius: 48px; font-weight: 600; color: white; cursor: pointer; }
+    .btn-outline { background: transparent; border: 1px solid var(--electric); padding: 8px 18px; border-radius: 48px; cursor: pointer; color: white; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: #0f212e; padding: 12px 24px; border-radius: 48px; border-left: 4px solid var(--emerald); z-index: 1100; animation: slideIn 0.3s; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @media (max-width:768px){ .container{padding:16px;} }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <div class="logo">COONE<span style="color:#2b6ef0;">BANK</span> <span style="font-size:0.8rem;">| Developer</span></div>
+    <div class="dev-badge"><i class="fas fa-code"></i> API v2.0 · Open Banking Ready</div>
+    <div class="user-widget"><i class="fas fa-bell"></i><div class="avatar">DEV</div><span>API Developer</span></div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div>API Calls (Month)</div><div class="stat-value">187,432</div></div>
+    <div class="stat-card"><div>Avg Response</div><div class="stat-value">47ms</div></div>
+    <div class="stat-card"><div>Uptime</div><div class="stat-value">99.99%</div></div>
+    <div class="stat-card"><div>Active Apps</div><div class="stat-value">7</div></div>
+  </div>
+
+  <div class="dev-main">
+    <div class="sidebar">
+      <div class="glass-card">
+        <div class="nav-item active" data-section="overview"><i class="fas fa-dashboard"></i> Overview</div>
+        <div class="nav-item" data-section="api-keys"><i class="fas fa-key"></i> API Keys</div>
+        <div class="nav-item" data-section="endpoints"><i class="fas fa-code-branch"></i> Endpoints</div>
+        <div class="nav-item" data-section="webhooks"><i class="fas fa-bell"></i> Webhooks</div>
+        <div class="nav-item" data-section="sandbox"><i class="fas fa-flask"></i> Sandbox</div>
+        <div class="nav-item" data-section="apps"><i class="fas fa-mobile-alt"></i> My Apps</div>
+      </div>
+    </div>
+    <div class="content">
+      <div id="overviewSection" class="section-content">
+        <div class="glass-card"><div class="card-header"><span><i class="fas fa-rocket"></i> Quick Start</span><button class="btn-outline" id="fullDocsBtn">Full Docs</button></div><p>Build next-gen financial apps with Coone's Open Banking APIs.</p><div class="code-block">curl -X GET https://api.coone.com/v1/accounts \ -H "Authorization: Bearer YOUR_API_KEY"</div><button class="btn-primary" id="createTestKeyBtn">Create Test Key</button></div>
+        <div class="glass-card"><div class="card-header"><span><i class="fas fa-chart-line"></i> API Usage</span></div><canvas id="usageChart" style="height:200px;"></canvas></div>
+      </div>
+      <div id="apiKeysSection" class="section-content" style="display:none;">
+        <div class="glass-card"><div class="card-header"><span><i class="fas fa-key"></i> API Keys</span><button class="btn-primary" id="generateKeyBtn">+ Generate New</button></div><div id="apiKeysList"><div class="api-key-container"><span>coone_live_8f3j2k9d0s1m4n5b</span><button class="copy-key" data-key="coone_live_8f3j2k9d0s1m4n5b"><i class="fas fa-copy"></i></button></div><div class="api-key-container"><span>coone_test_4h7g2k9x2a8p4m1q</span><button class="copy-key" data-key="coone_test_4h7g2k9x2a8p4m1q"><i class="fas fa-copy"></i></button></div></div></div>
+      </div>
+      <div id="endpointsSection" class="section-content" style="display:none;">
+        <div class="glass-card"><div class="card-header"><span><i class="fas fa-code-branch"></i> REST Endpoints</span><input type="text" id="endpointSearch" placeholder="Search..." style="background:#0f1a2b; border-radius:40px; padding:8px 16px;"></div><div id="endpointsList"><div class="endpoint-item"><span class="endpoint-method method-get">GET</span> <code>/v1/accounts</code><p>List all accounts</p></div><div class="endpoint-item"><span class="endpoint-method method-post">POST</span> <code>/v1/payments/transfer</code><p>Initiate ACH, Wire, or instant transfer</p></div></div></div>
+      </div>
+      <div id="webhooksSection" class="section-content" style="display:none;">
+        <div class="glass-card"><div class="card-header"><span><i class="fas fa-bell"></i> Webhooks</span><button class="btn-primary" id="addWebhookBtn">+ Add Endpoint</button></div><div id="webhooksList"><div class="webhook-item" style="padding:12px; border-bottom:1px solid rgba(255,255,255,0.1);"><strong>Payment Success</strong><br><small>https://api.myapp.com/webhooks/coone/payment</small><span style="float:right;" class="status-active">active</span></div></div></div>
+      </div>
+      <div id="sandboxSection" class="section-content" style="display:none;">
+        <div class="glass-card"><div class="card-header"><span><i class="fas fa-flask"></i> API Sandbox Tester</span></div><select id="sandboxEndpoint" class="tester-select"><option>/v1/accounts</option><option>/v1/payments/transfer</option></select><textarea id="sandboxBody" class="tester-input" rows="4" placeholder='{"amount": 100, "recipient": "test@coone.com"}'></textarea><button class="btn-primary" id="runSandboxBtn">Send Request</button><div id="sandboxResponse" class="code-block" style="margin-top:16px;"><span style="color:#8ba3cf;">// Response will appear here</span></div></div>
+      </div>
+      <div id="appsSection" class="section-content" style="display:none;">
+        <div class="glass-card"><div class="card-header"><span><i class="fas fa-mobile-alt"></i> Registered Apps</span><button class="btn-primary" id="registerAppBtn">+ Register App</button></div><div id="appsList"><div class="webhook-item"><strong>Fintech Dashboard</strong><br><small>Web App · OAuth 2.0</small><span style="float:right;">45k requests</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  const sections = ['overview','api-keys','endpoints','webhooks','sandbox','apps'];
+  function showSection(sectionId) { sections.forEach(s => { document.getElementById(`${s}Section`).style.display = 'none'; }); document.getElementById(`${sectionId}Section`).style.display = 'block'; document.querySelectorAll('.nav-item').forEach(item => { if(item.getAttribute('data-section')===sectionId) item.classList.add('active'); else item.classList.remove('active'); }); }
+  document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click',()=>showSection(item.getAttribute('data-section'))));
+  document.getElementById('createTestKeyBtn')?.addEventListener('click',()=>showToast('Test API key created: coone_test_demo_2024'));
+  document.getElementById('generateKeyBtn')?.addEventListener('click',()=>{ const newKey=`coone_live_${Math.random().toString(36).substring(2,15)}`; const div=document.createElement('div'); div.className='api-key-container'; div.innerHTML=`<span>${newKey}</span><button class="copy-key" data-key="${newKey}"><i class="fas fa-copy"></i></button>`; document.getElementById('apiKeysList').appendChild(div); showToast('New API key generated'); });
+  document.getElementById('runSandboxBtn')?.addEventListener('click',()=>{ const endpoint=document.getElementById('sandboxEndpoint').value; const body=document.getElementById('sandboxBody').value; document.getElementById('sandboxResponse').innerHTML=`<span style="color:#10b981;">// 200 OK</span><br>{ "status": "success", "endpoint": "${endpoint}", "data": { "message": "Sandbox response simulated" } }`; showToast(`Request sent to ${endpoint}`); });
+  document.getElementById('addWebhookBtn')?.addEventListener('click',()=>showToast('Webhook endpoint configuration opened'));
+  document.getElementById('registerAppBtn')?.addEventListener('click',()=>showToast('App registration form opened'));
+  document.getElementById('fullDocsBtn')?.addEventListener('click',()=>showToast('Full API documentation opened'));
+  document.querySelectorAll('.copy-key').forEach(btn=>btn.addEventListener('click',()=>{ navigator.clipboard.writeText(btn.getAttribute('data-key')); showToast('API key copied'); }));
+  const ctx=document.getElementById('usageChart')?.getContext('2d'); if(ctx){ new Chart(ctx,{type:'line',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'API Calls',data:[12400,18900,15200,21000,27800,18900,14300],borderColor:'#2b6ef0'}]}}); }
+  function showToast(msg){ const t=document.createElement('div'); t.className='toast'; t.innerHTML=`<i class="fas fa-check-circle"></i> ${msg}`; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+  showSection('overview');
+</script>
+</body>
+</html>
