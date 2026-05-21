@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Coone Bank — Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+  /* BACK BUTTON (matched style from sign-in page) */
+.top-bar{
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 20;
+}
+
+.back-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--text-primary);
+  padding:12px 18px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.02);
+  backdrop-filter:blur(10px);
+  transition:.35s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.back-btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(201,168,76,0.08),
+    transparent
+  );
+  transform:translateX(-100%);
+  transition:.6s ease;
+}
+
+.back-btn:hover::before{
+  transform:translateX(100%);
+}
+
+.back-btn:hover{
+  border-color:var(--gold);
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.35);
+}
+
+.back-btn i{
+  color:var(--gold);
+  font-size:13px;
+}
+
+.back-btn span{
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:600;
+}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+  --gold:#C9A84C;
+  --gold-light:#E8C97A;
+  --obsidian:#090909;
+  --panel:#141418;
+  --panel-light:#1B1B20;
+  --border:rgba(201,168,76,0.22);
+  --text-primary:#F0EAD6;
+  --text-secondary:#9E957C;
+}
+
+body{
+  font-family:'Montserrat',sans-serif;
+  background:var(--obsidian);
+  color:var(--text-primary);
+  min-height:100vh;
+}
+
+/* BACKGROUND */
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:
+    radial-gradient(circle at top right, rgba(201,168,76,0.10), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(201,168,76,0.06), transparent 35%),
+    linear-gradient(160deg,#090909,#111114,#090909);
+}
+
+/* TOP BAR */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 22px;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(10px);
+}
+
+.brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;
+  letter-spacing:.08em;
+}
+
+.brand span{
+  color:var(--gold);
+}
+
+.logout{
+  padding:10px 14px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-primary);
+  cursor:pointer;
+  transition:.3s;
+}
+
+.logout:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+/* MAIN */
+.container{
+  padding:30px 20px;
+  max-width:1100px;
+  margin:auto;
+}
+
+.welcome{
+  margin-bottom:30px;
+}
+
+.welcome h1{
+  font-size:26px;
+}
+
+.welcome p{
+  color:var(--text-secondary);
+  margin-top:6px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:18px;
+}
+
+.card h3{
+  font-size:13px;
+  color:var(--text-secondary);
+  letter-spacing:.12em;
+}
+
+.card .value{
+  font-size:22px;
+  margin-top:10px;
+  color:var(--gold-light);
+}
+
+/* QUICK ACTIONS */
+.actions{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
+
+.action-btn{
+  padding:14px;
+  background:var(--panel-light);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  cursor:pointer;
+  transition:.3s;
+}
+
+.action-btn:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+</style>
+</head>
+
+<body>
+  <div class="top-bar">
+  <a href="index.html" class="back-btn">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+</div>
+
+<div class="bg"></div>
+
+<div class="topbar">
+  <div class="brand">COONE<span>BANK</span></div>
+  <button class="logout" id="logoutBtn">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </button>
+</div>
+
+<div class="container">
+
+  <div class="welcome">
+    <h1 id="userName">Welcome</h1>
+    <p id="userEmail">Loading account...</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>ACCOUNT BALANCE</h3>
+      <div class="value">$ 24,580.00</div>
+    </div>
+
+    <div class="card">
+      <h3>ACCOUNT TYPE</h3>
+      <div class="value" id="accountType">--</div>
+    </div>
+
+    <div class="card">
+      <h3>STATUS</h3>
+      <div class="value">ACTIVE</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="action-btn">Transfer</button>
+    <button class="action-btn">Deposit</button>
+    <button class="action-btn">Cards</button>
+    <button class="action-btn">History</button>
+  </div>
+
+</div>
+
+<script>
+
+// LOAD USER FROM LOGIN
+const user = JSON.parse(localStorage.getItem('coone_user'));
+
+if(!user){
+  window.location.href = "index.html";
+}
+
+document.getElementById('userName').innerText =
+  "Welcome, " + (user.name || "User");
+
+document.getElementById('userEmail').innerText =
+  user.email || "";
+
+document.getElementById('accountType').innerText =
+  user.account || "Standard";
+
+// LOGOUT
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('coone_user');
+  window.location.href = "index.html";
+});
+
+</script>
+
+</body>
+</html>

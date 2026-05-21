@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+
+  <title>Coone Bank — Secure Sign In</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --gold:#C9A84C;
+      --gold-light:#E8C97A;
+      --obsidian:#090909;
+      --panel:#141418;
+      --panel-light:#1B1B20;
+      --border:rgba(201,168,76,0.22);
+      --border-bright:rgba(201,168,76,0.5);
+      --text-primary:#F0EAD6;
+      --text-secondary:#9E957C;
+      --danger:#ffb6b6;
+    }
+
+    html,
+    body{
+      min-height:100%;
+      background:var(--obsidian);
+      font-family:'Montserrat',sans-serif;
+      overflow-x:hidden;
+      color:var(--text-primary);
+    }
+
+    body{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:30px 18px;
+    }
+
+    /* BACKGROUND */
+
+    .bg{
+      position:fixed;
+      inset:0;
+      z-index:-3;
+      background:
+        radial-gradient(circle at top right,
+        rgba(201,168,76,0.10),
+        transparent 30%),
+
+        radial-gradient(circle at bottom left,
+        rgba(201,168,76,0.06),
+        transparent 35%),
+
+        linear-gradient(
+          160deg,
+          #090909 0%,
+          #111114 50%,
+          #090909 100%
+        );
+    }
+
+    .bg::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity:.4;
+    }
+
+    .scan-line{
+      position:fixed;
+      left:0;
+      right:0;
+      top:-2px;
+      height:1px;
+      z-index:-1;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(201,168,76,0.5),
+        transparent
+      );
+      animation:scan 6s linear infinite;
+    }
+
+    @keyframes scan{
+      from{ top:-2px; }
+      to{ top:100vh; }
+    }
+
+    /* CONTAINER */
+
+    .container{
+      width:100%;
+      max-width:520px;
+      animation:fadeUp 1s ease;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* BACK BUTTON */
+
+    .top-bar{
+      margin-bottom:18px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .back-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:var(--text-primary);
+      padding:12px 18px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.02);
+      backdrop-filter:blur(10px);
+      transition:.35s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .back-btn::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(201,168,76,0.08),
+        transparent
+      );
+      transform:translateX(-100%);
+      transition:.6s ease;
+    }
+
+    .back-btn:hover::before{
+      transform:translateX(100%);
+    }
+
+    .back-btn:hover{
+      border-color:var(--gold);
+      transform:translateY(-2px);
+      box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    .back-btn i{
+      color:var(--gold);
+      font-size:13px;
+    }
+
+    .back-btn span{
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:600;
+    }
+
+    /* CARD */
+
+    .signin-card{
+      background:rgba(20,20,24,0.95);
+      border:1px solid var(--border);
+      position:relative;
+      overflow:hidden;
+      backdrop-filter:blur(18px);
+      box-shadow:
+      0 25px 80px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .signin-card::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:2px;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        var(--gold-light),
+        transparent
+      );
+    }
+
+    .signin-card::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+
+    .card-inner{
+      padding:50px;
+    }
+
+    /* LOGO */
+
+    .logo-wrap{
+      text-align:center;
+      margin-bottom:36px;
+    }
+
+    .bank-icon{
+      width:72px;
+      height:72px;
+      border:1px solid var(--border);
+      margin:0 auto 20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      background:rgba(201,168,76,0.04);
+    }
+
+    .bank-icon::before{
+      content:'';
+      position:absolute;
+      inset:8px;
+      border:1px solid rgba(201,168,76,0.18);
+    }
+
+    .bank-icon i{
+      font-size:28px;
+      color:var(--gold);
+    }
+
+    .logo{
+      font-family:'Cormorant Garamond',serif;
+      font-size:42px;
+      font-weight:600;
+      letter-spacing:.06em;
+      background:linear-gradient(
+        135deg,
+        #fff,
+        var(--gold-light)
+      );
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      margin-bottom:8px;
+    }
+
+    .subtitle{
+      font-size:11px;
+      letter-spacing:.28em;
+      color:var(--text-secondary);
+      text-transform:uppercase;
+    }
+
+    /* ERROR */
+
+    .error-message{
+      display:none;
+      background:rgba(255,0,0,0.07);
+      border:1px solid rgba(255,0,0,0.18);
+      color:var(--danger);
+      padding:14px;
+      font-size:12px;
+      margin-bottom:22px;
+      animation:fadeError .3s ease;
+    }
+
+    @keyframes fadeError{
+      from{
+        opacity:0;
+        transform:translateY(-8px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* FORM */
+
+    .form-group{
+      margin-bottom:24px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:10px;
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--text-secondary);
+      font-weight:600;
+    }
+
+    .input-wrapper{
+      position:relative;
+    }
+
+    .input-wrapper .left-icon{
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:var(--gold);
+      font-size:13px;
+    }
+
+    .input-wrapper .toggle-password{
+      position:absolute;
+      right:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:var(--text-secondary);
+      cursor:pointer;
+      transition:.3s ease;
+    }
+
+    .input-wrapper .toggle-password:hover{
+      color:var(--gold);
+    }
+
+    input{
+      width:100%;
+      background:var(--panel-light);
+      border:1px solid var(--border);
+      color:var(--text-primary);
+      padding:16px 50px 16px 48px;
+      font-size:14px;
+      transition:.35s ease;
+    }
+
+    input::placeholder{
+      color:#6e6757;
+    }
+
+    input:focus{
+      outline:none;
+      border-color:var(--gold);
+      background:#1f1f24;
+      box-shadow:
+      0 0 0 4px rgba(201,168,76,0.08),
+      0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    /* BUTTON */
+
+    .signin-btn{
+      width:100%;
+      border:none;
+      cursor:pointer;
+      margin-top:10px;
+      padding:17px;
+      background:linear-gradient(
+        135deg,
+        #B8922A 0%,
+        #D5B458 50%,
+        #E8C97A 100%
+      );
+      color:#111;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      transition:.35s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .signin-btn::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:-100%;
+      width:100%;
+      height:100%;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.3),
+        transparent
+      );
+      transition:.7s;
+    }
+
+    .signin-btn:hover::before{
+      left:100%;
+    }
+
+    .signin-btn:hover{
+      transform:translateY(-3px);
+      box-shadow:
+      0 15px 35px rgba(201,168,76,0.25);
+    }
+
+    /* LINKS */
+
+    .bottom-links{
+      margin-top:26px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .bottom-links a{
+      color:var(--text-secondary);
+      text-decoration:none;
+      font-size:12px;
+      transition:.3s ease;
+    }
+
+    .bottom-links a:hover{
+      color:var(--gold);
+    }
+
+    /* SECURE */
+
+    .secure-badge{
+      margin-top:34px;
+      border-top:1px solid var(--border);
+      padding-top:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      color:var(--gold);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-align:center;
+    }
+
+    .secure-badge i{
+      font-size:13px;
+    }
+
+    /* MOBILE */
+
+    @media(max-width:640px){
+
+      .card-inner{
+        padding:34px 22px;
+      }
+
+      .logo{
+        font-size:34px;
+      }
+
+      .subtitle{
+        font-size:10px;
+        letter-spacing:.18em;
+      }
+
+      .bottom-links{
+        flex-direction:column;
+        align-items:center;
+      }
+
+      .back-btn{
+        width:100%;
+        justify-content:center;
+      }
+
+    }
+/* LOADING SCREEN */
+
+.loading-screen{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top right,
+    rgba(201,168,76,0.08),
+    transparent 30%),
+    #090909;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.loading-screen.active{
+  display:flex;
+}
+
+.loading-content{
+  text-align:center;
+  width:100%;
+  max-width:400px;
+  padding:20px;
+  animation:fadeLoader 1s ease;
+}
+
+@keyframes fadeLoader{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.loading-logo{
+  width:120px;
+  height:120px;
+  margin:0 auto 30px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.loading-ring{
+  position:absolute;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:1px solid rgba(201,168,76,0.15);
+  border-top:1px solid var(--gold);
+  animation:rotate 2s linear infinite;
+}
+
+.loading-ring.ring-two{
+  width:90px;
+  height:90px;
+  animation-direction:reverse;
+  animation-duration:1.5s;
+}
+
+@keyframes rotate{
+  from{
+    transform:rotate(0deg);
+  }
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.loading-icon{
+  width:60px;
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(201,168,76,0.08);
+  border:1px solid var(--border);
+  color:var(--gold);
+  font-size:24px;
+}
+
+.loading-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:42px;
+  font-weight:600;
+  letter-spacing:.08em;
+  background:linear-gradient(
+    135deg,
+    #fff,
+    var(--gold-light)
+  );
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+}
+
+.loading-subtitle{
+  color:var(--text-secondary);
+  font-size:11px;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  margin-bottom:35px;
+}
+
+.loading-progress{
+  width:100%;
+  height:6px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  overflow:hidden;
+  position:relative;
+}
+
+.loading-bar{
+  width:0%;
+  height:100%;
+  background:linear-gradient(
+    90deg,
+    #B8922A,
+    #E8C97A
+  );
+  transition:width .2s linear;
+}
+
+.loading-percent{
+  margin-top:16px;
+  color:var(--gold);
+  font-size:13px;
+  letter-spacing:.12em;
+  font-weight:600;
+}
+  </style>
+</head>
+<!-- LOADING SCREEN -->
+
+<div class="loading-screen" id="loadingScreen">
+
+  <div class="loading-content">
+
+    <div class="loading-logo">
+
+      <div class="loading-ring"></div>
+
+      <div class="loading-ring ring-two"></div>
+
+      <div class="loading-icon">
+        <i class="fas fa-landmark"></i>
+      </div>
+
+    </div>
+
+    <div class="loading-title">
+      COONEBANK
+    </div>
+
+    <div class="loading-subtitle">
+      INITIALIZING SECURE SESSION
+    </div>
+
+    <div class="loading-progress">
+
+      <div class="loading-bar" id="loadingBar"></div>
+
+    </div>
+
+    <div class="loading-percent" id="loadingPercent">
+      0%
+    </div>
+
+  </div>
+
+</div>
+<body>
+
+<div class="bg"></div>
+<div class="scan-line"></div>
+
+<div class="container">
+
+  <!-- TOP BAR -->
+
+  <div class="top-bar">
+
+    <a href="index.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back</span>
+    </a>
+
+  </div>
+
+  <!-- SIGN IN CARD -->
+
+  <div class="signin-card">
+
+    <div class="card-inner">
+
+      <div class="logo-wrap">
+
+        <div class="bank-icon">
+          <i class="fas fa-landmark"></i>
+        </div>
+
+        <div class="logo">
+          COONEBANK
+        </div>
+
+        <div class="subtitle">
+          Secure Digital Banking Access
+        </div>
+
+      </div>
+
+      <!-- ERROR -->
+
+      <div class="error-message" id="errorMessage">
+        Invalid email or password
+      </div>
+
+      <!-- FORM -->
+
+      <form id="signinForm">
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+          <label>Email Address</label>
+
+          <div class="input-wrapper">
+
+            <i class="fas fa-envelope left-icon"></i>
+
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            />
+
+          </div>
+
+        </div>
+
+        <!-- PASSWORD -->
+
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <div class="input-wrapper">
+
+            <i class="fas fa-lock left-icon"></i>
+
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+
+            <!-- SHOW PASSWORD BUTTON -->
+
+            <i
+              class="fas fa-eye toggle-password"
+              id="togglePassword"
+            ></i>
+
+          </div>
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <button type="submit" class="signin-btn">
+          Sign In
+        </button>
+
+      </form>
+
+      <!-- LINKS -->
+
+      <div class="bottom-links">
+
+        <a href="#">
+          Forgot Password?
+        </a>
+
+        <a href="onboarding.html">
+          Create Account
+        </a>
+
+      </div>
+
+      <!-- SECURE -->
+
+      <div class="secure-badge">
+
+        <i class="fas fa-shield-alt"></i>
+
+        <span>
+          Protected by CooneBank Secure Encryption
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  const signinForm =
+    document.getElementById('signinForm');
+
+  const errorMessage =
+    document.getElementById('errorMessage');
+
+  const passwordInput =
+    document.getElementById('password');
+
+  const togglePassword =
+    document.getElementById('togglePassword');
+
+  // SHOW / HIDE PASSWORD
+
+  togglePassword.addEventListener('click', function(){
+
+    const type =
+      passwordInput.getAttribute('type') === 'password'
+      ? 'text'
+      : 'password';
+
+    passwordInput.setAttribute('type', type);
+
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+
+  });
+
+ const loadingScreen =
+  document.getElementById('loadingScreen');
+
+const loadingBar =
+  document.getElementById('loadingBar');
+
+const loadingPercent =
+  document.getElementById('loadingPercent');
+
+signinForm.addEventListener('submit', function(e){
+
+  e.preventDefault();
+
+  const email =
+    document.getElementById('email')
+    .value
+    .trim();
+
+  const password =
+    passwordInput.value.trim();
+
+  if(email && password){
+
+    const user = {
+      name:'Michael Doe',
+      email:email,
+      account:'Premium'
+    };
+
+    localStorage.setItem(
+      'coone_user',
+      JSON.stringify(user)
+    );
+
+    // SHOW LOADER
+
+    loadingScreen.classList.add('active');
+
+    let progress = 0;
+
+    const interval = setInterval(() => {
+
+      progress++;
+
+      loadingBar.style.width =
+        progress + '%';
+
+      loadingPercent.innerText =
+        progress + '%';
+
+      if(progress >= 100){
+
+        clearInterval(interval);
+
+        setTimeout(() => {
+
+          window.location.href =
+            'dashboard.html';
+
+        }, 300);
+
+      }
+
+    }, 50); // 100 x 50ms = 5 seconds
+
+  }else{
+
+    errorMessage.style.display =
+      'block';
+
+  }
+
+});
+</script>
+
+</body>
+</html>

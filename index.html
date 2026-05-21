@@ -1,217 +1,785 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TD Bank | Your Trusted Financial Partner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Coone Bank — Gold Standard | Private Bitcoin Banking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-
-        /* Transparent Header */
-        header {
-            background-color: rgba(0, 107, 18, 0.8); /* Green with slight transparency */
-            backdrop-filter: blur(5px);
-            color: rgb(119, 141, 23);
-            padding: 15px 0px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        header .logo img {
-            width: 180px;
-            
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
+        /* ---------- RESET & VARIABLES ---------- */
+        *, *::before, *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        nav ul li {
-            display: inline;
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8C97A;
+            --gold-pale: #F5E8C0;
+            --obsidian: #0A0A0B;
+            --deep: #0F0F12;
+            --panel: #141418;
+            --panel-light: #1C1C22;
+            --border: rgba(201,168,76,0.25);
+            --border-bright: rgba(201,168,76,0.6);
+            --text-primary: #F0EAD6;
+            --text-secondary: #A09880;
+            --text-dim: #5C5648;
+            --success: #2ECC71;
         }
 
-        /* Modern Buttons */
-        .nav-button {
-            padding: 10px 35px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
+        body {
+            background: var(--obsidian);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: radial-gradient(ellipse 80% 60% at 70% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+                        radial-gradient(ellipse 60% 80% at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 55%),
+                        linear-gradient(160deg, #0A0A0B 0%, #0F0E0C 50%, #0A0A0B 100%);
+        }
+        .bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-size: 200px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .scan-line {
+            position: fixed;
+            top: -2px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent);
+            animation: scan 6s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        @keyframes scan {
+            from { top: -2px; }
+            to { top: 100vh; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ---------- NAVIGATION (mobile friendly) ---------- */
+        nav {
+            background: rgba(17, 20, 28, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+        }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            background: linear-gradient(135deg, #FFF, var(--gold-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo i {
+            color: var(--gold);
+            margin-right: 5px;
+        }
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-link {
+            color: var(--text-secondary);
             text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .nav-link:hover { color: var(--gold); }
+        .btn-outline-nav, .btn-primary-nav {
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .btn-outline-nav {
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+        }
+        .btn-outline-nav:hover {
+            background: var(--gold);
+            color: var(--obsidian);
+        }
+        .btn-primary-nav {
+            background: linear-gradient(135deg, #B8922A, var(--gold), var(--gold-light));
+            background-size: 200% 100%;
             border: none;
-            transition: 0.3s ease-in-out;
-            background: linear-gradient(135deg, #00b64f, #00802b);
-            color: rgba(7, 1, 1, 0.945);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            color: var(--obsidian);
+        }
+        .btn-primary-nav:hover {
+            background-position: 100% 0;
+            transform: translateY(-2px);
         }
 
-        .nav-button:hover {
-            background: linear-gradient(135deg, #00d956, #009431);
-            transform: scale(1.05);
-        }
-
-        /* Hero Section */
+        /* ---------- HERO SECTION (mobile stack) ---------- */
         .hero {
-            background: url('Family.png') no-repeat center/cover;
-            height: 90vh;
-            color: rgb(107, 131, 20);
+            padding: 40px 0 30px;
+        }
+        .hero-grid {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: left;
-            text-align: left;
-            padding: 150px;
-            margin-top: 80px; /* Prevents header overlap */
+            gap: 30px;
         }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin: 0;
+        .hero-text {
+            order: 1;
         }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin: 15px 0;
+        .hero-stats {
+            order: 2;
         }
-
-        .hero .cta-buttons a {
-            padding: 12px 24px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: 0.3s ease-in-out;
-            margin-right: 10px;
+        .hero-badge {
+            background: rgba(201,168,76,0.12);
+            color: var(--gold-light);
             display: inline-block;
+            padding: 5px 14px;
+            border: 1px solid rgba(201,168,76,0.2);
+            font-size: 0.75rem;
+            margin-bottom: 18px;
         }
-
-        .hero .cta-buttons .cta-primary {
-            background: #007b27;
-            color: white;
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.4rem;
+            line-height: 1.2;
+            margin-bottom: 15px;
         }
-
-        .hero .cta-buttons .cta-primary:hover {
-            background: #00591d;
+        .highlight {
+            color: var(--gold);
         }
-
-        .hero .cta-buttons .cta-secondary {
-            background: white;
-            color: #007b27;
-            border: 2px solid #007b27;
+        .hero-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
-
-        .hero .cta-buttons .cta-secondary:hover {
-            background: #007b27;
-            color: white;
-        }
-
-        /* Icon Section */
-        .icons {
+        .btn-group {
             display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin: 30px 0;
+            flex-direction: column;
+            gap: 12px;
         }
-
-        .icon-box {
+        .btn-primary, .btn-secondary {
+            width: 100%;
             text-align: center;
+            padding: 12px 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #B8922A, var(--gold), var(--gold-light));
+            background-size: 200% 100%;
+            border: none;
+            color: var(--obsidian);
+        }
+        .btn-primary:hover {
+            background-position: 100% 0;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.08);
+            color: var(--gold-light);
+        }
+
+        /* Stats panel (gold panel style) */
+        .hero-stats {
+            background: var(--panel);
+            border: 1px solid var(--border);
             padding: 20px;
-            background: #f4f4f4;
-            border-radius: 15px;
-            width: 150px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .hero-stats::before,
+        .hero-stats::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--gold);
+            border-style: solid;
+            opacity: 0.6;
+        }
+        .hero-stats::before {
+            top: -1px;
+            left: -1px;
+            border-width: 2px 0 0 2px;
+        }
+        .hero-stats::after {
+            bottom: -1px;
+            right: -1px;
+            border-width: 0 2px 2px 0;
+        }
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .stats-header span:first-child {
+            font-weight: 700;
+            color: var(--gold);
+        }
+        .live-badge {
+            font-size: 0.6rem;
+            background: var(--panel-light);
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .stat-card {
+            background: var(--panel-light);
+            border: 1px solid var(--border);
+            padding: 12px;
+        }
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .stat-label i {
+            color: var(--gold);
+        }
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .stat-change {
+            font-size: 0.65rem;
+            margin-top: 5px;
+        }
+        .positive { color: var(--success); }
+        .negative { color: #E57373; }
+        .number-flash {
+            transform: scale(1.05);
+            color: var(--gold);
+            text-shadow: 0 0 5px rgba(201,168,76,0.5);
+        }
+        .stats-footer {
+            font-size: 0.65rem;
+            text-align: center;
+            margin-top: 14px;
+            color: var(--text-dim);
         }
 
-        .icon-box i {
-            font-size: 30px;
-            color: #007b27;
+        /* Features & CTA */
+        .section {
+            padding: 40px 0;
         }
-
-        .icon-box p {
-            margin-top: 10px;
-            font-size: 1rem;
-            font-weight: bold;
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .feature-card {
+            background: var(--panel-light);
+            border: 1px solid var(--border);
+            padding: 24px 16px;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .feature-card:hover {
+            border-color: var(--border-bright);
+            transform: translateY(-4px);
+        }
+        .feature-card i {
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .cta-banner {
+            background: linear-gradient(125deg, #0F0F12, #0A0A0B);
+            border: 1px solid var(--border);
+            padding: 32px 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .cta-banner h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+        .cta-banner p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
         }
 
         /* Footer */
         footer {
-            background: #004b1c;
-            color: white;
+            background: #07090F;
+            border-top: 1px solid var(--border);
+            padding: 30px 0;
+            margin-top: 30px;
             text-align: center;
-            padding: 15px 0;
-            margin-top: 40px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        .footer-links span {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            cursor: pointer;
+        }
+        .footer-links span:hover {
+            color: var(--gold);
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            width: 90%;
+            max-width: 400px;
+            padding: 24px 20px;
+            position: relative;
+        }
+        .modal-top-strip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+        }
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-dim);
+        }
+        .close-modal:hover {
+            color: var(--gold);
+        }
+        .modal-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: var(--panel-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+        }
+        .modal-content input:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+        .modal-content button {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .switch-form {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .switch-form a {
+            color: var(--gold);
+            cursor: pointer;
+        }
+
+        /* ---------- TABLET & DESKTOP (min-width 768px) ---------- */
+        @media (min-width: 768px) {
+            .hero-grid {
+                flex-direction: row;
+                align-items: center;
+                gap: 40px;
+            }
+            .hero-text {
+                flex: 1.2;
+                order: 0;
+            }
+            .hero-stats {
+                flex: 1;
+                order: 0;
+            }
+            .btn-group {
+                flex-direction: row;
+            }
+            .btn-primary, .btn-secondary {
+                width: auto;
+            }
+            h1 {
+                font-size: 3rem;
+            }
+            .stat-value {
+                font-size: 1.7rem;
+            }
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 30px;
+            }
+            .section-title {
+                font-size: 2.5rem;
+            }
+            .cta-banner h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            h1 {
+                font-size: 3.4rem;
+            }
+            .container {
+                padding: 0 30px;
+            }
         }
     </style>
 </head>
 <body>
+<div class="bg"></div>
+<div class="scan-line"></div>
 
-    <!-- Header -->
-    <header>
+<nav>
+    <div class="container nav-container">
         <div class="logo">
-            <img src="tdb-tag-white-en.png" alt="TD Bank Logo">
+            <i class="fab fa-bitcoin"></i> Coone<span style="color:var(--gold);">Bank</span>
         </div>
-        <nav>
-            <ul>
-                <li><button onclick="window.location.href='Services.html';" class="nav-button">Services</button></li>
-                <li><button onclick="window.location.href='About Us.html';" class="nav-button">About Us</button></li>
-                <li><button onclick="window.location.href='Contact.html';" class="nav-button">Contact</button></li>
-                <li><button onclick="window.location.href='loginpage2.html';" class="nav-button">Login</button></li>
-            </ul>
-        </nav>
-    </header>
+        <div class="nav-links">
+    <a href="personal.html" class="nav-link">Personal</a>
+    <a href="business.html" class="nav-link">Business</a>
+    <a href="vault.html" class="nav-link">Bitcoin Vault</a>
+    <a href="rewards.html" class="nav-link">Rewards</a>
+    <a href="signin.html" class="btn-outline-nav" >
+  <i class="fas fa-key"></i> Sign In
+</a>
+    <a href="onboarding.html" class="btn-primary-nav"><i class="fas fa-user-plus"></i> Sign Up</a>
+</div>
+            
+    </div>
+</nav>
 
-    <!-- Hero Section -->
-    <div class="hero">
-        <h1>Welcome to TD Bank</h1>
-        <p>Your Trusted Financial Partner for Personal and Business Banking</p>
-        <div class="cta-buttons">
-            <a><button onclick="window.location.href='About Us.html';" class="nav-button">About Us</button></a>
-            <a href="learnmore.html" class="cta-secondary">Learn More</a>
+<main>
+    <div class="container hero">
+        <div class="hero-grid">
+            <div class="hero-text">
+                <div class="hero-badge"><i class="fas fa-chart-line"></i> New: Bitcoin yield accounts</div>
+                <h1>Bank where <span class="highlight">Bitcoin</span> meets the future of finance</h1>
+                <p class="hero-desc">Coone Bank delivers institutional-grade crypto custody, instant BTC transfers, and industry-leading rewards. Join 2M+ forward thinkers.</p>
+                <div class="btn-group">
+                    <a href="Onboarding.html">
+  <button class="btn-primary" id="heroOpenAccount">
+    🚀 Open Account
+  </button>
+</a>
+                    <button class="btn-secondary" id="heroLearnMore"><i class="fab fa-bitcoin"></i> Explore BTC</button>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stats-header">
+                    <span><i class="fab fa-bitcoin"></i> Live Bitcoin Index</span>
+                    <span class="live-badge">real-time simulated</span>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="fas fa-dollar-sign"></i> BTC PRICE</div>
+                        <div class="stat-value" id="btcPrice">$67,432.80</div>
+                        <div class="stat-change" id="priceChange">+2.34%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="fas fa-chart-line"></i> 24H CHANGE</div>
+                        <div class="stat-value" id="btcChangePct">+2.34%</div>
+                        <div class="stat-change" id="changeDirection">↗️ Bullish</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="fas fa-chart-simple"></i> MARKET CAP</div>
+                        <div class="stat-value" id="btcMarketCap">$1.32T</div>
+                        <div class="stat-change">dominance 49%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="fas fa-waveform"></i> VOLUME (24H)</div>
+                        <div class="stat-value" id="btcVolume">$28.4B</div>
+                        <div class="stat-change">high liquidity</div>
+                    </div>
+                </div>
+                <div class="stats-footer">⚡ live every 4 seconds · animated ticks</div>
+            </div>
         </div>
     </div>
 
-    <!-- Icons Section -->
-    <div class="icons">
-        <div class="icon-box">
-            <i>🏦</i>
-            <p>Banking Services</p>
-        </div>
-        <div class="icon-box">
-            <i>💳</i>
-            <p>Credit Cards</p>
-        </div>
-        <div class="icon-box">
-            <i>📈</i>
-            <p>Investments</p>
-        </div>
-        <div class="icon-box">
-            <i>💼</i>
-            <p>Business Solutions</p>
+    <div class="container section">
+        <h2 class="section-title">Banking built for the Bitcoin economy</h2>
+        <div class="features-grid">
+            <div class="feature-card"><i class="fas fa-shield-alt"></i><h3>Secure Vault</h3><p>Multi-sig cold storage + military‑grade encryption.</p></div>
+            <div class="feature-card"><i class="fas fa-percent"></i><h3>5% BTC Rewards</h3><p>Earn cashback in Bitcoin on every purchase.</p></div>
+            <div class="feature-card"><i class="fas fa-bolt"></i><h3>Lightning fast</h3><p>Instant on-chain & Lightning settlements.</p></div>
+            <div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Mobile first</h3><p>Intuitive app with biometric login.</p></div>
         </div>
     </div>
-    
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 TD Bank. All Rights Reserved.Contact email:tdcustomerservice667@gmail.com
-            </p>
-    </footer>
+    <div class="container">
+        <div class="cta-banner">
+            <h2>Start earning Bitcoin rewards today</h2>
+            <p>No hidden fees • 2 minutes setup • Up to 8% APY on BTC deposits</p>
+            <button class="btn-primary" id="ctaOpenAccount" style="background: white; color:#0a0c12;">Claim my account →</button>
+        </div>
+    </div>
 
+    <div class="container section" style="padding-top:0">
+        <div class="features-grid">
+            <div class="feature-card"><i class="fas fa-chart-line"></i><h3>BTC Loans</h3><p>Borrow cash using Bitcoin as collateral.</p></div>
+            <div class="feature-card"><i class="fas fa-university"></i><h3>No hidden fees</h3><p>Zero monthly maintenance + free ATM worldwide.</p></div>
+            <div class="feature-card"><i class="fas fa-hand-holding-usd"></i><h3>Round-up savings</h3><p>Invest spare change into Bitcoin automatically.</p></div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <span>Privacy Policy</span>
+            <span>Terms of Use</span>
+            <span>Support</span>
+            <span>Careers</span>
+        </div>
+        <p>© 2025 Coone Bank — Bridging Bitcoin & Traditional Finance. All rights reserved.</p>
+    </div>
+</footer>
+
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-top-strip"></div>
+        <span class="close-modal">&times;</span>
+        <div id="modalDynamicContent"></div>
+    </div>
+</div>
+
+<script>
+    // ---------- LIVE BITCOIN STATS (animated) ----------
+    let btcPrice = 67432.80;
+    let marketCap = 1.32e12;
+    let volume24h = 28.4e9;
+
+    const btcPriceElem = document.getElementById('btcPrice');
+    const btcChangeElem = document.getElementById('btcChangePct');
+    const btcMarketCapElem = document.getElementById('btcMarketCap');
+    const btcVolumeElem = document.getElementById('btcVolume');
+    const priceChangeElem = document.getElementById('priceChange');
+    const changeDirectionElem = document.getElementById('changeDirection');
+
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+    }
+    function formatLarge(num) {
+        if (num >= 1e12) return '$' + (num / 1e12).toFixed(2) + 'T';
+        if (num >= 1e9) return '$' + (num / 1e9).toFixed(2) + 'B';
+        return '$' + (num / 1e6).toFixed(2) + 'M';
+    }
+
+    function animateNumberChange(element, newValue, isCurrency = true, isLarge = false) {
+        let oldValue = parseFloat(element.innerText.replace(/[^0-9.-]+/g, ""));
+        if (isNaN(oldValue)) oldValue = 0;
+        const duration = 200;
+        const startTime = performance.now();
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(1, elapsed / duration);
+            const currentVal = oldValue + (newValue - oldValue) * progress;
+            let display;
+            if (isLarge) display = formatLarge(currentVal);
+            else if (isCurrency) display = formatCurrency(currentVal);
+            else display = currentVal.toFixed(2) + '%';
+            element.innerText = display;
+            if (progress < 1) requestAnimationFrame(update);
+            else {
+                if (isLarge) element.innerText = formatLarge(newValue);
+                else if (isCurrency) element.innerText = formatCurrency(newValue);
+                else element.innerText = newValue.toFixed(2) + '%';
+                element.classList.add('number-flash');
+                setTimeout(() => element.classList.remove('number-flash'), 150);
+            }
+        }
+        requestAnimationFrame(update);
+    }
+
+    function updateBTCStats() {
+        const priceChangeVal = (Math.random() * 5 - 2.5).toFixed(2);
+        const newPrice = btcPrice * (1 + priceChangeVal / 100);
+        const newChange = parseFloat(priceChangeVal);
+        const newMarketCap = marketCap * (1 + (Math.random() * 0.8 - 0.4) / 100);
+        const newVolume = volume24h * (1 + (Math.random() * 2 - 1) / 100);
+
+        animateNumberChange(btcPriceElem, newPrice, true, false);
+        animateNumberChange(btcChangeElem, newChange, false, false);
+        animateNumberChange(btcMarketCapElem, newMarketCap, true, true);
+        animateNumberChange(btcVolumeElem, newVolume, true, true);
+
+        const isPositive = newChange >= 0;
+        priceChangeElem.innerHTML = `${isPositive ? '+' : ''}${newChange.toFixed(2)}%`;
+        priceChangeElem.className = `stat-change ${isPositive ? 'positive' : 'negative'}`;
+        changeDirectionElem.innerHTML = isPositive ? '↗️ Bullish' : '↘️ Bearish';
+        btcPrice = newPrice;
+        marketCap = newMarketCap;
+        volume24h = newVolume;
+    }
+    setInterval(updateBTCStats, 4000);
+    updateBTCStats();
+
+    // ---------- MODAL LOGIC ----------
+    const modal = document.getElementById('authModal');
+    const modalDynamic = document.getElementById('modalDynamicContent');
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    function openModal(type) {
+        if (type === 'signin') {
+            modalDynamic.innerHTML = `
+                <h3><i class="fas fa-key" style="color:var(--gold);"></i> Sign In</h3>
+                <input type="email" id="modalEmail" placeholder="Email or Client ID" autocomplete="email">
+                <input type="password" id="modalPassword" placeholder="Access Code">
+                <button class="btn-primary" id="modalSignInBtn" style="background:linear-gradient(135deg, #B8922A, var(--gold)); width:100%;">Access Vault</button>
+                <div class="switch-form">New to Coone? <a id="switchToSignup">Create account</a></div>
+                <div class="switch-form"><a id="forgotLink">Lost credentials?</a></div>
+            `;
+        } else {
+            modalDynamic.innerHTML = `
+                <h3><i class="fas fa-user-plus" style="color:var(--gold);"></i> Open Account</h3>
+                <input type="text" id="modalFullName" placeholder="Full name">
+                <input type="email" id="modalEmailSignup" placeholder="Email">
+                <input type="password" id="modalPasswordSignup" placeholder="Create password">
+                <button class="btn-primary" id="modalSignUpBtn" style="background:linear-gradient(135deg, #B8922A, var(--gold)); width:100%;">Start Onboarding →</button>
+                <div class="switch-form">Already have an account? <a id="switchToSignin">Sign in</a></div>
+            `;
+        }
+        document.querySelector('.close-modal').addEventListener('click', closeModal);
+        if (type === 'signin') {
+            document.getElementById('switchToSignup').addEventListener('click', () => openModal('signup'));
+            document.getElementById('forgotLink').addEventListener('click', () => { alert("Contact private banking: recovery@coone.com"); closeModal(); });
+            document.getElementById('modalSignInBtn').addEventListener('click', () => {
+                const email = document.getElementById('modalEmail').value;
+                const pwd = document.getElementById('modalPassword').value;
+                if (email && pwd) { alert(`Welcome back, ${email}. Redirecting...`); closeModal(); }
+                else alert("Please enter email and password.");
+            });
+        } else {
+            document.getElementById('switchToSignin').addEventListener('click', () => openModal('signin'));
+            document.getElementById('modalSignUpBtn').addEventListener('click', () => {
+                const name = document.getElementById('modalFullName').value;
+                const email = document.getElementById('modalEmailSignup').value;
+                const pwd = document.getElementById('modalPasswordSignup').value;
+                if (name && email && pwd.length >= 6) {
+                    alert(`Thank you ${name}. Redirecting to account opening...`);
+                    // window.location.href = 'onboarding.html';
+                } else alert("Please fill all fields and use a strong password (min 6 chars).");
+            });
+        }
+        modal.style.display = 'flex';
+    }
+
+    document.getElementById('signInNavLink').addEventListener('click', (e) => { e.preventDefault(); openModal('signin'); });
+    document.getElementById('signUpNavBtn').addEventListener('click', (e) => { e.preventDefault(); openModal('signup'); });
+    document.getElementById('heroOpenAccount').addEventListener('click', () => openModal('signup'));
+    document.getElementById('ctaOpenAccount').addEventListener('click', () => openModal('signup'));
+    document.getElementById('heroLearnMore').addEventListener('click', () => alert("Bitcoin Vault: 24/7 trading, cold storage, and 5% staking rewards."));
+
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+</script>
 </body>
 </html>

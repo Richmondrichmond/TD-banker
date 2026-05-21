@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes" />
+  <title>Coone Bank — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* --- base styles (same as before, compacted) --- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C97A; --gold-pale: #F5E8C0;
+      --obsidian: #0A0A0B; --deep: #0F0F12; --panel: #141418; --panel-light: #1C1C22;
+      --border: rgba(201,168,76,0.25); --border-bright: rgba(201,168,76,0.6);
+      --text-primary: #F0EAD6; --text-secondary: #A09880; --text-dim: #5C5648;
+      --error: #C0392B; --success: #2ECC71;
+    }
+    html, body { height: 100%; background: var(--obsidian); font-family: 'Montserrat', sans-serif; color: var(--text-primary); overflow-x: hidden; }
+    .bg { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 60% at 70% 20%, rgba(201,168,76,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 55%), linear-gradient(160deg, #0A0A0B 0%, #0F0E0C 50%, #0A0A0B 100%); }
+    .scan-line { position: fixed; top: -2px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent); animation: scan 6s linear infinite; z-index: 1; pointer-events: none; }
+    @keyframes scan { from { top: -2px } to { top: 100vh } }
+    .container { position: relative; z-index: 10; max-width: 880px; margin: 0 auto; padding: 32px 20px 60px; }
+    .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: linear-gradient(135deg, #FFFFFF, var(--gold-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .security-badge { background: rgba(201,168,76,0.1); border: 1px solid var(--border); border-radius: 40px; padding: 6px 18px; font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+    .onboarding-card, .dashboard-card { background: var(--panel); border: 1px solid var(--border); position: relative; border-radius: 0; }
+    .onboarding-card::before, .dashboard-card::before,
+    .onboarding-card::after, .dashboard-card::after { content: ''; position: absolute; width: 24px; height: 24px; border-color: var(--gold); border-style: solid; opacity: 0.6; pointer-events: none; }
+    .onboarding-card::before, .dashboard-card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .onboarding-card::after, .dashboard-card::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+    .card-inner { padding: 40px 44px; }
+    @media (max-width: 640px) { .card-inner { padding: 28px 20px; } }
+    .step-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; margin-bottom: 8px; }
+    .step-subtitle { color: var(--text-secondary); font-size: 13px; margin-bottom: 32px; border-left: 2px solid var(--gold); padding-left: 14px; }
+    .form-group { margin-bottom: 24px; }
+    label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    input, select { width: 100%; background: var(--panel-light); border: 1px solid var(--border); border-radius: 0; padding: 14px 18px; color: var(--text-primary); font-family: 'Montserrat', sans-serif; font-size: 15px; }
+    input:focus, select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,168,76,0.2); }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 560px) { .row-2 { grid-template-columns: 1fr; gap: 16px; } }
+    .account-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin: 24px 0; }
+    .account-card { background: rgba(28,28,34,0.6); border: 1px solid var(--border); padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .account-card.selected { border-color: var(--gold); background: rgba(201,168,76,0.08); box-shadow: 0 0 12px rgba(201,168,76,0.2); }
+    .account-card i { font-size: 28px; color: var(--text-dim); margin-bottom: 12px; }
+    .account-card.selected i { color: var(--gold); }
+    .upload-card { background: rgba(15,20,25,0.5); border: 1px solid var(--border); padding: 18px; margin-bottom: 24px; }
+    .upload-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+    .btn-icon { background: rgba(201,168,76,0.1); border: 1px solid var(--border); padding: 6px 14px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: var(--text-primary); }
+    .preview-img { max-width: 100%; max-height: 160px; border: 1px solid var(--border); margin-top: 12px; display: none; object-fit: contain; background: #0a0a0c; }
+    .btn-primary, .btn-outline { padding: 12px 28px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; border: none; }
+    .btn-primary { background: linear-gradient(135deg, #B8922A, var(--gold), #E8C97A); color: var(--obsidian); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+    .btn-group { display: flex; justify-content: space-between; gap: 16px; margin-top: 32px; }
+    .form-step { display: none; animation: fadeIn 0.4s ease; }
+    .form-step.active-step { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* LOADING OVERLAY */
+    .loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10,10,11,0.95); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; flex-direction: column; gap: 20px;
+      transition: opacity 0.5s; opacity: 0; visibility: hidden;
+    }
+    .loading-overlay.active { opacity: 1; visibility: visible; }
+    .spinner { width: 60px; height: 60px; border: 4px solid rgba(201,168,76,0.2); border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loading-text { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-pale); }
+
+    /* DASHBOARD MULTI-PAGE TABS */
+    .dashboard { display: none; }
+    .dashboard.active { display: block; }
+    .dashboard-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .tab-btn { background: none; border: none; padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--text-dim); cursor: pointer; transition: 0.2s; position: relative; }
+    .tab-btn.active { color: var(--gold); }
+    .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
+    .tab-page { display: none; animation: fadeIn 0.3s; }
+    .tab-page.active-page { display: block; }
+    .welcome-card { background: var(--panel-light); border: 1px solid var(--border); padding: 24px; margin-bottom: 24px; }
+    .balance { font-size: 36px; font-family: 'Cormorant Garamond', serif; color: var(--gold); }
+    .quick-actions { display: flex; gap: 16px; flex-wrap: wrap; margin: 24px 0; }
+    .action-btn { background: rgba(201,168,76,0.1); border: 1px solid var(--border); padding: 12px 20px; cursor: pointer; font-size: 13px; }
+    .transaction-list { list-style: none; margin-top: 16px; }
+    .transaction-list li { padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+    .signout { background: transparent; border-color: var(--error); color: var(--error); margin-top: 20px; width: 100%; }
+  </style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="scan-line"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Securely loading your dashboard...</div></div>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">COONE<span style="color:var(--gold);">BANK</span></div>
+    <div class="security-badge"><i class="fas fa-shield-alt"></i> 256-bit encrypted</div>
+    <div style="cursor:pointer; font-size:12px; color:var(--gold);" id="showSignInLink">Sign in</div>
+  </div>
+
+  <!-- SIGN-UP FORM (multi-step) -->
+  <div id="appForm" class="onboarding-card">
+    <div class="card-inner">
+      <div id="step1" class="form-step active-step">
+        <div class="step-title">Choose your account</div>
+        <div class="step-subtitle">Select the wealth solution that fits you</div>
+        <div class="account-types">
+          <div class="account-card" data-account="personal"><i class="fas fa-user"></i><h4>Personal</h4><p>Checking, savings, AI tools</p></div>
+          <div class="account-card" data-account="premium"><i class="fas fa-crown"></i><h4>Premium</h4><p>Wealth mgmt, lounge access</p></div>
+          <div class="account-card" data-account="business"><i class="fas fa-building"></i><h4>Business</h4><p>Payroll, API, merchant</p></div>
+          <div class="account-card" data-account="joint"><i class="fas fa-users"></i><h4>Joint</h4><p>Family & shared accounts</p></div>
+        </div>
+        <div class="btn-group"><button class="btn-primary" id="nextStep1" disabled>Continue →</button></div>
+      </div>
+      <div id="step2" class="form-step">
+        <div class="step-title">Personal information</div>
+        <div class="step-subtitle">We need your basic details</div>
+        <div class="row-2"><div class="form-group"><label>First name</label><input type="text" id="firstName"></div><div class="form-group"><label>Last name</label><input type="text" id="lastName"></div></div>
+        <div class="form-group"><label>Email address</label><input type="email" id="email"></div>
+        <div class="form-group"><label>Phone number</label><input type="tel" id="phone"></div>
+        <div class="row-2"><div class="form-group"><label>Date of birth</label><input type="date" id="dob"></div><div class="form-group"><label>SSN / Tax ID</label><input type="text" id="ssn"></div></div>
+        <div class="btn-group"><button class="btn-outline" id="prevStep2">← Back</button><button class="btn-primary" id="nextStep2">Continue →</button></div>
+      </div>
+      <div id="step3" class="form-step">
+        <div class="step-title">Verify your identity</div>
+        <div class="step-subtitle">Upload government‑issued ID (front & back)</div>
+        <div class="form-group"><label>ID Type</label><select id="idType"><option>Driver's License</option><option>Passport</option><option>State ID</option></select></div>
+        <div class="upload-card"><div class="upload-header"><h4><i class="fas fa-id-card"></i> Front side</h4><div class="button-group"><button type="button" class="btn-icon gallery-front"><i class="fas fa-image"></i> Gallery</button><button type="button" class="btn-icon camera-front"><i class="fas fa-camera"></i> Camera</button></div></div><img class="preview-img" id="frontPreview"><div class="upload-status" id="frontStatus"></div><input type="file" id="frontGalleryInput" accept="image/*" style="display:none"><input type="file" id="frontCameraInput" accept="image/*" capture="environment" style="display:none"></div>
+        <div class="upload-card"><div class="upload-header"><h4><i class="fas fa-id-card"></i> Back side</h4><div class="button-group"><button type="button" class="btn-icon gallery-back"><i class="fas fa-image"></i> Gallery</button><button type="button" class="btn-icon camera-back"><i class="fas fa-camera"></i> Camera</button></div></div><img class="preview-img" id="backPreview"><div class="upload-status" id="backStatus"></div><input type="file" id="backGalleryInput" accept="image/*" style="display:none"><input type="file" id="backCameraInput" accept="image/*" capture="environment" style="display:none"></div>
+        <div class="btn-group"><button class="btn-outline" id="prevStep3">← Back</button><button class="btn-primary" id="nextStep3">Continue →</button></div>
+      </div>
+      <div id="step4" class="form-step">
+        <div class="step-title">Secure your account</div>
+        <div class="step-subtitle">Password & 2FA (last step)</div>
+        <div class="form-group"><label>Password</label><input type="password" id="password" placeholder="min. 8 characters"></div>
+        <div class="form-group"><label>Confirm password</label><input type="password" id="confirmPassword"></div>
+        <div class="account-types" style="grid-template-columns:1fr 1fr;"><div class="account-card" data-2fa="authenticator"><i class="fas fa-mobile-alt"></i><h4>Authenticator App</h4></div><div class="account-card" data-2fa="sms"><i class="fas fa-sms"></i><h4>SMS Verification</h4></div></div>
+        <div class="form-group"><label><input type="checkbox" id="biometric"> Enable biometric login</label></div>
+        <div class="btn-group"><button class="btn-outline" id="prevStep4">← Back</button><button class="btn-primary" id="submitAppFinal">Open Dashboard →</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGN-IN FORM -->
+  <div id="signInForm" class="onboarding-card" style="display: none;">
+    <div class="card-inner">
+      <div class="step-title">Sign in to Coone Bank</div>
+      <div class="step-subtitle">Welcome back</div>
+      <div class="form-group"><label>Email</label><input type="email" id="signinEmail"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="signinPassword"></div>
+      <div class="btn-group"><button class="btn-outline" id="showSignUp">No account? Sign up</button><button class="btn-primary" id="doSignIn">Sign in →</button></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD (multi-page) -->
+  <div id="dashboard" class="dashboard">
+    <div class="dashboard-card">
+      <div class="card-inner">
+        <div class="dashboard-tabs">
+          <button class="tab-btn active" data-tab="overview">Overview</button>
+          <button class="tab-btn" data-tab="transfers">Transfers</button>
+          <button class="tab-btn" data-tab="profile">Profile</button>
+        </div>
+        <!-- Overview Tab -->
+        <div id="tab-overview" class="tab-page active-page">
+          <div class="welcome-card">
+            <h2>Welcome, <span id="dashboardName">Client</span></h2>
+            <p><span id="dashboardAccount">Personal</span> Account</p>
+            <div class="balance">$ 124,850.00</div>
+          </div>
+          <div class="quick-actions">
+            <div class="action-btn" id="quickTransferBtn"><i class="fas fa-exchange-alt"></i> Transfer</div>
+            <div class="action-btn"><i class="fas fa-chart-line"></i> Portfolio</div>
+            <div class="action-btn"><i class="fas fa-file-invoice"></i> Statements</div>
+          </div>
+        </div>
+        <!-- Transfers Tab -->
+        <div id="tab-transfers" class="tab-page">
+          <h3>Make a Transfer</h3>
+          <div class="form-group"><label>Recipient</label><input type="text" id="recipient" placeholder="Account number or email"></div>
+          <div class="form-group"><label>Amount (USD)</label><input type="number" id="amount" placeholder="0.00"></div>
+          <button class="btn-primary" id="simulateTransfer" style="width:100%">Send Transfer</button>
+          <h4 style="margin-top: 24px;">Recent Activity</h4>
+          <ul class="transaction-list" id="transactionList"><li>No recent transactions</li></ul>
+        </div>
+        <!-- Profile Tab -->
+        <div id="tab-profile" class="tab-page">
+          <h3>Your Profile</h3>
+          <p><strong>Name:</strong> <span id="profileName"></span></p>
+          <p><strong>Account type:</strong> <span id="profileAccount"></span></p>
+          <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+          <button id="signOutBtn" class="btn-outline signout">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ----- loading helper -----
+  function showLoading(callback) {
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.classList.add('active');
+    setTimeout(() => {
+      if (callback) callback();
+      overlay.classList.remove('active');
+    }, 1500); // modern loading simulation
+  }
+
+  // ----- multi-step sign-up logic (minimal, same as before) -----
+  let selectedAccount = null;
+  let frontImageData = null, backImageData = null;
+  let selected2FA = null;
+
+  const steps = [null, document.getElementById('step1'), document.getElementById('step2'), document.getElementById('step3'), document.getElementById('step4')];
+  let currentStep = 1;
+  function showStep(step) {
+    for(let i=1;i<=4;i++) if(steps[i]) steps[i].classList.remove('active-step');
+    if(steps[step]) steps[step].classList.add('active-step');
+    currentStep = step;
+  }
+
+  // Step1
+  document.querySelectorAll('.account-card[data-account]').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.account-card[data-account]').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedAccount = card.getAttribute('data-account');
+      document.getElementById('nextStep1').disabled = false;
+    });
+  });
+  document.getElementById('nextStep1').onclick = () => { if(selectedAccount) showStep(2); else alert('Select account'); };
+  document.getElementById('prevStep2').onclick = () => showStep(1);
+  document.getElementById('nextStep2').onclick = () => {
+    let f=document.getElementById('firstName').value.trim(), l=document.getElementById('lastName').value.trim(), e=document.getElementById('email').value.trim(), p=document.getElementById('phone').value.trim(), d=document.getElementById('dob').value, s=document.getElementById('ssn').value.trim();
+    if(!f||!l||!e||!p||!d||!s) return alert('Fill all fields');
+    if(!e.includes('@')) return alert('Valid email');
+    showStep(3);
+  };
+  document.getElementById('prevStep3').onclick = () => showStep(2);
+  // ID upload handling
+  function handleUpload(input, isFront){
+    let file = input.files[0];
+    if(!file) return;
+    let reader = new FileReader();
+    reader.onload = e => {
+      if(isFront){ frontImageData=e.target.result; document.getElementById('frontPreview').src=frontImageData; document.getElementById('frontPreview').style.display='block'; document.getElementById('frontStatus').innerHTML='<i class="fas fa-check-circle"></i> Uploaded';}
+      else { backImageData=e.target.result; document.getElementById('backPreview').src=backImageData; document.getElementById('backPreview').style.display='block'; document.getElementById('backStatus').innerHTML='<i class="fas fa-check-circle"></i> Uploaded';}
+    };
+    reader.readAsDataURL(file);
+  }
+  document.querySelector('.gallery-front')?.addEventListener('click',()=>document.getElementById('frontGalleryInput').click());
+  document.querySelector('.camera-front')?.addEventListener('click',()=>document.getElementById('frontCameraInput').click());
+  document.querySelector('.gallery-back')?.addEventListener('click',()=>document.getElementById('backGalleryInput').click());
+  document.querySelector('.camera-back')?.addEventListener('click',()=>document.getElementById('backCameraInput').click());
+  document.getElementById('frontGalleryInput')?.addEventListener('change',e=>handleUpload(e.target,true));
+  document.getElementById('frontCameraInput')?.addEventListener('change',e=>handleUpload(e.target,true));
+  document.getElementById('backGalleryInput')?.addEventListener('change',e=>handleUpload(e.target,false));
+  document.getElementById('backCameraInput')?.addEventListener('change',e=>handleUpload(e.target,false));
+  document.getElementById('nextStep3').onclick = () => { if(!frontImageData||!backImageData) return alert('Upload both ID sides'); showStep(4); };
+  document.getElementById('prevStep4').onclick = () => showStep(3);
+  document.querySelectorAll('[data-2fa]').forEach(card=>{
+    card.addEventListener('click',()=>{
+      document.querySelectorAll('[data-2fa]').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      selected2FA = card.getAttribute('data-2fa');
+    });
+  });
+
+  // Helper to show dashboard after loading
+  function showDashboardAfterLoading(userData) {
+    showLoading(() => {
+      document.getElementById('appForm').style.display = 'none';
+      document.getElementById('signInForm').style.display = 'none';
+      document.getElementById('dashboard').classList.add('active');
+      // populate dashboard fields
+      document.getElementById('dashboardName').innerText = userData.name;
+      document.getElementById('dashboardAccount').innerText = userData.account;
+      document.getElementById('profileName').innerText = userData.name;
+      document.getElementById('profileAccount').innerText = userData.account;
+      document.getElementById('profileEmail').innerText = userData.email;
+      // store in localStorage for sign-in
+      localStorage.setItem('coone_user', JSON.stringify(userData));
+    });
+  }
+
+  // Final submit
+  document.getElementById('submitAppFinal').onclick = () => {
+    let pwd = document.getElementById('password').value;
+    let confirm = document.getElementById('confirmPassword').value;
+    if(pwd.length<8) return alert('Password 8+ chars');
+    if(pwd !== confirm) return alert('Passwords match');
+    if(!selected2FA) return alert('Select 2FA method');
+    let firstName = document.getElementById('firstName').value;
+    let lastName = document.getElementById('lastName').value;
+    let accountType = selectedAccount === 'personal' ? 'Personal' : selectedAccount === 'premium' ? 'Premium' : selectedAccount === 'business' ? 'Business' : 'Joint';
+    let email = document.getElementById('email').value;
+    showDashboardAfterLoading({ name: firstName + ' ' + lastName, account: accountType, email: email });
+  };
+
+  // Sign in
+  document.getElementById('doSignIn').onclick = () => {
+    let email = document.getElementById('signinEmail').value.trim();
+    let pwd = document.getElementById('signinPassword').value;
+    if(!email || !pwd) return alert('Enter email and password');
+    let saved = localStorage.getItem('coone_user');
+    let userData = saved ? JSON.parse(saved) : { name: 'Demo User', account: 'Demo', email: email || 'demo@coone.com' };
+    showDashboardAfterLoading(userData);
+  };
+
+  // Switch between sign-up and sign-in
+  document.getElementById('showSignUp').onclick = () => {
+    document.getElementById('signInForm').style.display = 'none';
+    document.getElementById('appForm').style.display = 'block';
+  };
+  document.getElementById('showSignInLink').onclick = () => {
+    document.getElementById('appForm').style.display = 'none';
+    document.getElementById('signInForm').style.display = 'block';
+    document.getElementById('dashboard').classList.remove('active');
+  };
+
+  // Sign out
+  document.getElementById('signOutBtn').onclick = () => {
+    document.getElementById('dashboard').classList.remove('active');
+    document.getElementById('signInForm').style.display = 'block';
+    document.getElementById('appForm').style.display = 'none';
+  };
+
+  // Dashboard tab switching
+  const tabs = document.querySelectorAll('.tab-btn');
+  const pages = {
+    overview: document.getElementById('tab-overview'),
+    transfers: document.getElementById('tab-transfers'),
+    profile: document.getElementById('tab-profile')
+  };
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      Object.values(pages).forEach(p => p.classList.remove('active-page'));
+      const tabName = btn.getAttribute('data-tab');
+      if(pages[tabName]) pages[tabName].classList.add('active-page');
+    });
+  });
+
+  // Simulate transfer (adds a transaction)
+  document.getElementById('simulateTransfer')?.addEventListener('click', () => {
+    let recipient = document.getElementById('recipient').value;
+    let amount = document.getElementById('amount').value;
+    if(!recipient || !amount || amount<=0) return alert('Enter valid recipient and amount');
+    let list = document.getElementById('transactionList');
+    let newItem = document.createElement('li');
+    newItem.innerHTML = `<span>To: ${recipient}</span><span>$${parseFloat(amount).toFixed(2)}</span>`;
+    if(list.firstChild.innerText === 'No recent transactions') list.innerHTML = '';
+    list.prepend(newItem);
+    document.getElementById('recipient').value = '';
+    document.getElementById('amount').value = '';
+    alert('Transfer initiated (demo)');
+  });
+
+  // Quick transfer button on overview
+  document.getElementById('quickTransferBtn')?.addEventListener('click', () => {
+    // switch to transfers tab
+    document.querySelector('.tab-btn[data-tab="transfers"]').click();
+  });
+})();
+</script>
+</body>
+</html>
